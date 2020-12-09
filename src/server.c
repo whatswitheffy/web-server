@@ -59,7 +59,7 @@ int readStr(int fd, char **string) {
     char *str = NULL;
     char c;
     int i = 0, status;
-    while (((status = read(fd, &c, sizeof(char))) > 0) && (c != '\0')) {
+    while (((status = read(fd, &c, sizeof(char))) > 0) && (c != '\n') && (c != ' ')) {       
         if (i % 16 == 0) {
             str = realloc(str, 16 * ((i / 16) + 1) * sizeof(char));
         }
@@ -83,13 +83,17 @@ int run_binary(char *path, int client_socket) {
 }
 void sendAnswer(int client_socket, char *type, int len) {
     char *str3 = "HTTP/1.1 200\n";
-    write(client_socket, str3, (strlen(str3) + 1) * sizeof(char));
-    write(client_socket, "content-type: ", 15 * sizeof(char));
-    write(client_socket, type,(strlen(type) + 1) * sizeof(char));
-    write(client_socket, "\n", 2 * sizeof(char));
-    write(client_socket, "content-length: ", 17 * sizeof(char));
-    write(client_socket, &len, sizeof(int));
-    write(client_socket, "\n", 2 * sizeof(char));
+    char *str1 = "content-type: ";
+    char *str2 = "content-length: ";
+    char str4[10];
+    snprintf(str4, 10, "%d", len);
+    write(client_socket, str3, strlen(str3) * sizeof(char));
+    write(client_socket, str1, strlen(str1) * sizeof(char));
+    write(client_socket, type, strlen(type) * sizeof(char));
+    write(client_socket, "\n", sizeof(char));
+    write(client_socket, str2, strlen(str2) * sizeof(char));
+    write(client_socket, str4, strlen(str4) * sizeof(char));
+    write(client_socket, "\n", sizeof(char));
 }
 int requestAnswer(char *arr[6], int client_socket) {
     struct stat stat;
@@ -97,6 +101,7 @@ int requestAnswer(char *arr[6], int client_socket) {
     char *str2 = "HTTP/1.1\n";
     char *type = NULL;
     char *string = NULL;
+    char *str3 = "html/text\n";
     int fd = 0;
     int len = 0;
     int i = 0;
@@ -104,7 +109,7 @@ int requestAnswer(char *arr[6], int client_socket) {
     if ((type = strchr(arr[1], '.')) == NULL) {
         type = "bin";
     } else {
-        type++;
+        type = str3;
     }
     if (strcmp(arr[0], "GET") != 0) {
         write(client_socket, str1, (strlen(str1) + 1) * sizeof(char));
@@ -128,7 +133,7 @@ int requestAnswer(char *arr[6], int client_socket) {
     sendAnswer(client_socket, type, len);
     if (strcmp(type, "bin") == 0) {
         run_binary(arr[1], client_socket);
-        write(client_socket, "\0", 2 * sizeof(char));
+        write(client_socket, "\n", sizeof(char));
     } else if (strcmp(type, "bdir") != 0) {
         readStr(fd, &string);
         write(client_socket, string, (strlen(string) + 1) * sizeof(char));
@@ -163,6 +168,7 @@ int main(int argc, char** argv) {
         j = 0;
         while (j != 6) {
             ret = readStr(client_socket, &str);
+            puts(str);
             arr[j] = str;
             j++;
             str = NULL;
