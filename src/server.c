@@ -101,7 +101,7 @@ int requestAnswer(char *arr[6], int client_socket) {
     char *str2 = "HTTP/1.1\n";
     char *type = NULL;
     char *string = NULL;
-    char *str3 = "html/text\n";
+    char *str3 = "text/html\n";
     int fd = 0;
     int len = 0;
     int i = 0;
