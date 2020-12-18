@@ -4,10 +4,10 @@ bin:
 	mkdir bin
 
 bin/server: src/server.c
-	gcc src/server.c -o bin/server -Wall -lm -fsanitize=undefined -fsanitize=address
+	gcc src/server.c -o bin/server 
 
 bin/client: src/client.c
-	gcc src/client.c -o bin/client -Wall -lm -fsanitize=undefined -fsanitize=address
+	gcc src/client.c -o bin/client 
 
 clean:
 	rm bin/server bin/client
