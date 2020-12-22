@@ -1,14 +1,13 @@
-all: bin bin/server bin/client
+all: src/server src/client src/cgi-bin/user
 	
-bin:
-	mkdir bin
+src/server: src/server.c
+	gcc src/server.c -o src/server 
 
-bin/server: src/server.c
-	gcc src/server.c -o bin/server 
+src/client: src/client.c
+	gcc src/client.c -o src/client 
 
-bin/client: src/client.c
-	gcc src/client.c -o bin/client 
+src/cgi-bin/user: src/cgi-bin/user.c
+	gcc src/cgi-bin/user.c -o src/cgi-bin/user
 
 clean:
-	rm bin/server bin/client
-	rmdir bin
+	rm src/server src/client
