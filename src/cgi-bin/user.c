@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 9; i++) {
 		if (strcmp(name, StudentList[i].name) == 0) {
 			if (strcmp(subject, "math") == 0) {
 				mark = StudentList[i].math_mark;
