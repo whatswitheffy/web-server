@@ -8,10 +8,16 @@ typedef struct Student {
 } Student;
 
 int main(int argc, char *argv[]) {
-	Student StudentList[3] = {
+	Student StudentList[9] = {
 		{"Eva", 5, 5},
 		{"Alex", 3, 2},
-		{"Alen", 10, 10}
+		{"Alen", 10, 10},
+		{"Dauren", 5, 5},
+		{"Tair", 6, 4},
+		{"Lera", 8, 9},
+		{"Tamerlan", 5, 9},
+		{"Aigerim", 4, 8}, 
+		{"Anna", 9, 10}
 	};
 	char *name, *subject;
 	int mark = -1;
